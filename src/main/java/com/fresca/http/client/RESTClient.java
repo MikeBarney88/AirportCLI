@@ -1,5 +1,6 @@
 package com.fresca.http.client;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -24,12 +25,11 @@ public class RESTClient {
 
         try {
             HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode()!=200) {
+            if (response.statusCode() != 200) {
                 System.out.println("Status Code: " + response.statusCode());
             }
 
             responseBody = response.body();
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -39,21 +39,19 @@ public class RESTClient {
 
 
     public List<Airport> getAllAirports() {
-        List<Airport> airports = new ArrayList<Airport>();
+        List<Airport> airports = new ArrayList<>();
 
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
 
         try {
             HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode()==200) {
+            if (response.statusCode() == 200) {
                 System.out.println("***** " + response.body());
             } else {
                 System.out.println("Error Status Code: " + response.statusCode());
             }
 
             airports = buildAirportListFromResponse(response.body());
-
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -63,7 +61,7 @@ public class RESTClient {
     }
 
     public List<Airport> buildAirportListFromResponse(String response) throws JsonProcessingException {
-        List<Airport> airports = new ArrayList<Airport>();
+        List<Airport> airports;
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
