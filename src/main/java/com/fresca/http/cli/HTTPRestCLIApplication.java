@@ -65,7 +65,7 @@ public class HTTPRestCLIApplication {
                 cliApp.listGreetings();
             } else if (serverURL.contains("airports")) {
                 cliApp.generateAirportReport();
-            } else if (serverURL.contains("cities" || serverURL.contains("city")) ) {
+            } else if (serverURL.contains("cities") || serverURL.contains("city")) {
 
             } else if (serverURL.contains("passengers")) {
 
