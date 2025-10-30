@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fresca.domain.Airport;
+import com.fresca.domain.Passenger;
 
 import java.io.IOException;
 import java.net.URI;
@@ -85,4 +86,37 @@ public class RESTClient {
 
         return client;
     }
+
+
+    public List<Passenger> getAllPassengers() {
+        List<Passenger> passengers = new ArrayList<>();
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
+
+        try{
+            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                System.out.println("***** " + response.body());
+            } else {
+                System.out.println("Error Status Code: " + response.statusCode());
+            }
+
+            passengers = buildPassengerListFromResponse(response.body());
+        } catch (IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+
+        return passengers;
+    }
+
+    private List<Passenger> buildPassengerListFromResponse(String response) throws JsonProcessingException {
+        List<Passenger> passengers;
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        passengers = mapper.readValue(response, new TypeReference<List<Passenger>>() {});
+
+        return passengers;
+    }
+
 }

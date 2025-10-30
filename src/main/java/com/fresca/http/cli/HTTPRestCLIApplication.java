@@ -1,6 +1,8 @@
 package com.fresca.http.cli;
 
+import com.fresca.domain.Aircraft;
 import com.fresca.domain.Airport;
+import com.fresca.domain.Passenger;
 import com.fresca.http.client.RESTClient;
 
 import java.util.List;
@@ -28,6 +30,39 @@ public class HTTPRestCLIApplication {
 
         return report.toString();
     }
+
+
+    public String generatePassengerAircraftReport() {
+        List<Passenger> passengers = getRestClient().getAllPassengers();
+
+        StringBuffer report = new StringBuffer();
+
+        for (Passenger passenger : passengers) {
+            report.append(passenger.getFirstName()).append(" ").append(passenger.getLastName());
+            report.append(" has flown on: ");
+
+            List<Aircraft> aircraft = passenger.getAircraft();
+            if (aircraft.isEmpty()) {
+                report.append("No aircraft");
+            } else {
+                for (int i = 0; i < aircraft.size(); i++) {
+                    report.append(aircraft.get(i).getType());
+                    if (i < aircraft.size() - 1) {
+                        report.append(", ");
+                    }
+                }
+            }
+
+            if (passengers.indexOf(passenger) != (passengers.size() - 1)) {
+                report.append("; ");
+            }
+        }
+
+        System.out.println(report);
+
+        return report.toString();
+    }
+
 
     private void listGreetings() {
         System.out.println(getRestClient().getResponseFromHTTPRequest());
