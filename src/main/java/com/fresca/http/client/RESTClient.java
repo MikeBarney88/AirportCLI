@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fresca.domain.Aircraft;
 import com.fresca.domain.Airport;
+import com.fresca.domain.Passenger;
 import com.fresca.domain.City;
 
 import java.io.IOException;
@@ -118,5 +120,75 @@ public class RESTClient {
         }
 
         return client;
+    }
+
+
+    public List<Passenger> getAllPassengers() {
+        List<Passenger> passengers = new ArrayList<>();
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
+
+        try{
+            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                System.out.println("***** " + response.body());
+            } else {
+                System.out.println("Error Status Code: " + response.statusCode());
+            }
+
+            passengers = buildPassengerListFromResponse(response.body());
+        } catch (IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+
+        return passengers;
+    }
+
+    private List<Passenger> buildPassengerListFromResponse(String response) throws JsonProcessingException {
+        List<Passenger> passengers;
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        passengers = mapper.readValue(response, new TypeReference<List<Passenger>>() {});
+
+        return passengers;
+    }
+
+
+
+    public List<Aircraft> getAircraftForPassenger(Long passengerId) {
+        List<Aircraft> aircraft = new ArrayList<>();
+
+        String url = serverURL;
+        if (!url.endsWith("/")) {
+            url += "/";
+        }
+        url += passengerId + "/aircraft";
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+
+        try {
+            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                System.out.println("***** Aircraft for passenger " + passengerId + ": " + response.body());
+                aircraft = buildAircraftListFromResponse(response.body());
+            } else {
+                System.out.println("Error Status Code: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return aircraft;
+    }
+
+    public List<Aircraft> buildAircraftListFromResponse(String response) throws JsonProcessingException {
+        List<Aircraft> aircraft;
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        aircraft = mapper.readValue(response, new TypeReference<List<Aircraft>>(){});
+
+        return aircraft;
     }
 }
