@@ -1,12 +1,12 @@
 package com.fresca.http.cli;
 
 import com.fresca.domain.Airport;
+import com.fresca.domain.City;
 import com.fresca.http.client.RESTClient;
 
 import java.util.List;
 
 public class HTTPRestCLIApplication {
-
     private RESTClient restClient;
 
     public String generateAirportReport() {
@@ -20,7 +20,7 @@ public class HTTPRestCLIApplication {
             report.append(airport.getCode());
 
             if (airports.indexOf(airport) != (airports.size() - 1)) {
-                report.append(",");
+                report.append(",\n");
             }
         }
 
@@ -29,8 +29,26 @@ public class HTTPRestCLIApplication {
         return report.toString();
     }
 
-    private void listGreetings() {
-        System.out.println(getRestClient().getResponseFromHTTPRequest());
+    public String generateCitiesReport() {
+        List<City> cities = getRestClient().getAllCities();
+
+        StringBuffer report = new StringBuffer();
+
+        for (City city : cities) {
+            report.append(city.getName());
+            report.append(", ");
+            report.append(city.getState());
+            report.append(" - ");
+            report.append(city.getPopulation());
+
+            if (cities.indexOf(city) != (cities.size() - 1)) {
+                report.append(",\n");
+            }
+        }
+
+        System.out.println(report);
+
+        return report.toString();
     }
 
     public RESTClient getRestClient() {
@@ -62,11 +80,11 @@ public class HTTPRestCLIApplication {
             cliApp.setRestClient(restClient);
 
             if (serverURL.contains("aircrafts")) {
-                cliApp.listGreetings();
+
             } else if (serverURL.contains("airports")) {
                 cliApp.generateAirportReport();
             } else if (serverURL.contains("cities") || serverURL.contains("city")) {
-
+                cliApp.generateCitiesReport();
             } else if (serverURL.contains("passengers")) {
 
             } else {}
