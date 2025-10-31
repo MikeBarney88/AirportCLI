@@ -191,4 +191,50 @@ public class RESTClient {
 
         return aircraft;
     }
+
+    public List<Aircraft> getAllAircraft() {
+        List<Aircraft> aircraft = new ArrayList<>();
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
+        try {
+            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                System.out.println("***** " + response.body());
+            } else {
+                System.out.println("Error Status Code: " + response.statusCode());
+            }
+
+            aircraft = buildAircraftListFromResponse(response.body());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return aircraft;
+    }
+
+    public List<Airport> getAirportsForAircraft(Long aircraftId) {
+        List<Airport> airports = new ArrayList<>();
+
+        String url = serverURL;
+        if (!url.endsWith("/")) {
+            url += "/";
+        }
+        url += aircraftId + "/airports";
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+
+        try {
+            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                System.out.println("***** Airports for aircraft " + aircraftId + ": " + response.body());
+                airports = buildAirportListFromResponse(response.body());
+            } else {
+                System.out.println("Error Status Code: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return airports;
+    }
 }
