@@ -1,6 +1,5 @@
 package com.fresca.http.client;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -8,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fresca.domain.Aircraft;
 import com.fresca.domain.Airport;
 import com.fresca.domain.Passenger;
+import com.fresca.domain.City;
 
 import java.io.IOException;
 import java.net.URI;
@@ -48,7 +48,7 @@ public class RESTClient {
         try {
             HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                System.out.println("***** " + response.body());
+                System.out.println("***** " + response.body() + "\n");
             } else {
                 System.out.println("Error Status Code: " + response.statusCode());
             }
@@ -71,6 +71,40 @@ public class RESTClient {
 
         return airports;
     }
+
+
+    public List<City> getAllCities() {
+        List<City> cities = new ArrayList<>();
+
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
+
+        try {
+            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                System.out.println("***** " + response.body() + "\n");
+            } else {
+                System.out.println("Error Status Code: " + response.statusCode());
+            }
+
+            cities = buildCitiesListFromResponse(response.body());
+        } catch (IOException | InterruptedException exception) {
+            exception.printStackTrace();
+        }
+
+        return cities;
+    }
+
+    public List<City> buildCitiesListFromResponse(String response) throws JsonProcessingException {
+        List<City> cities;
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        cities = mapper.readValue(response, new TypeReference<List<City>>(){});
+
+        return cities;
+    }
+
 
     public String getServerURL() {
         return serverURL;
