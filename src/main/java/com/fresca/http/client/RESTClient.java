@@ -119,4 +119,27 @@ public class RESTClient {
 
         return client;
     }
+    public List<Airport> getPassengerAirports() {
+        List<Airport> airports = new ArrayList<>();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(serverURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                System.out.println("***** " + response.body() + "\n");
+            } else {
+                System.out.println("Error Status Code: " + response.statusCode());
+            }
+
+            airports = buildAirportListFromResponse(response.body());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return airports;
+    }
 }

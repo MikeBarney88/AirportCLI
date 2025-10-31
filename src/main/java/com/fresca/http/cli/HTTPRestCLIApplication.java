@@ -91,4 +91,30 @@ public class HTTPRestCLIApplication {
 
         }
     }
+    public String generatePassengerAirportsReport() {
+        List<Airport> airports = getRestClient().getPassengerAirports();
+
+        StringBuffer report = new StringBuffer();
+
+        if (airports == null || airports.isEmpty()) {
+            report.append("No passenger airport data available.");
+            System.out.println(report);
+            return report.toString();
+        }
+
+        for (Airport airport : airports) {
+            report.append(airport.getName());
+            report.append(" (");
+            report.append(airport.getCode());
+            report.append(")");
+
+            if (airports.indexOf(airport) != (airports.size() - 1)) {
+                report.append(",\n");
+            }
+        }
+
+        System.out.println(report);
+
+        return report.toString();
+    }
 }
