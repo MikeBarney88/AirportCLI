@@ -56,6 +56,15 @@ public class HTTPRestCLIApplication {
 
             if (passengers.indexOf(passenger) != (passengers.size() - 1)) {
                 report.append("; ");
+            }
+        }
+
+        System.out.println(report);
+
+        return report.toString();
+    }
+
+    
     public String generateCitiesReport() {
         List<City> cities = getRestClient().getAllCities();
 
