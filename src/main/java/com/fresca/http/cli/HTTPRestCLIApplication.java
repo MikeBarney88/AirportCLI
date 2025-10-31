@@ -96,7 +96,6 @@ public class HTTPRestCLIApplication {
             report.append(aircraft.getType()).append(" (").append(aircraft.getAirlineName()).append(")");
             report.append(" takes off from and lands at: ");
 
-            // Fetch airports for this specific aircraft
             List<Airport> airports = getRestClient().getAirportsForAircraft(aircraft.getId());
 
             if (airports.isEmpty()) {
@@ -120,10 +119,6 @@ public class HTTPRestCLIApplication {
         return report.toString();
     }
 
-
-    private void listGreetings() {
-        System.out.println(getRestClient().getResponseFromHTTPRequest());
-    }
 
     public RESTClient getRestClient() {
         if (restClient == null) {
