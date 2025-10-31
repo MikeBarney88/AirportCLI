@@ -1,8 +1,10 @@
 package com.fresca.http.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fresca.domain.Aircraft;
 import com.fresca.domain.Airport;
 import com.fresca.domain.City;
+import com.fresca.domain.Passenger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,5 +43,29 @@ public class RESTClientTest {
         Assertions.assertEquals(1, cities.size());
         Assertions.assertEquals("St. Johns", cities.get(0).getName());
         Assertions.assertEquals("Newfoundland and Labrador", cities.get(0).getState());
+    }
+
+
+    @Test void testGetAllPassenger() throws JsonProcessingException {
+        String mockJSON = "[{\"firstName\": \"Joey\", \"lastName\": \"Thomas\", \"phoneNumber\": \"111-111-1111\"}]";
+        List<Passenger> passengers = restClient.buildPassengerListFromResponse(mockJSON);
+
+
+        Assertions.assertEquals(1, passengers.size());
+        Assertions.assertEquals("Joey", passengers.get(0).getFirstName());
+        Assertions.assertEquals("Thomas", passengers.get(0).getLastName());
+        Assertions.assertEquals("111-111-1111", passengers.get(0).getPhoneNumber());
+    }
+
+
+    @Test void testGetAllAircraft() throws JsonProcessingException {
+        String mockJSON = "[{\"type\": \"Boeing 747\", \"airlineName\": \"JoeySkies\", \"numberOfPassengers\": 300}]";
+        List<Aircraft> aircraft = restClient.buildAircraftListFromResponse(mockJSON);
+
+
+        Assertions.assertEquals(1, aircraft.size());
+        Assertions.assertEquals("Boeing 747", aircraft.get(0).getType());
+        Assertions.assertEquals("JoeySkies", aircraft.get(0).getAirlineName());
+        Assertions.assertEquals(300, aircraft.get(0).getNumberOfPassengers());
     }
 }

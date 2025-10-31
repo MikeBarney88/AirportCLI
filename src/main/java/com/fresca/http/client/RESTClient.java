@@ -167,7 +167,7 @@ public class RESTClient {
         return passengers;
     }
 
-    private List<Passenger> buildPassengerListFromResponse(String response) throws JsonProcessingException {
+    public List<Passenger> buildPassengerListFromResponse(String response) throws JsonProcessingException {
         List<Passenger> passengers;
 
         ObjectMapper mapper = new ObjectMapper();
