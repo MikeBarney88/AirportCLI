@@ -41,7 +41,8 @@ public class HTTPRestCLIApplication {
             report.append(passenger.getFirstName()).append(" ").append(passenger.getLastName());
             report.append(" has flown on: ");
 
-            List<Aircraft> aircraft = passenger.getAircraft();
+            List<Aircraft> aircraft = getRestClient().getAircraftForPassenger(passenger.getId());
+
             if (aircraft.isEmpty()) {
                 report.append("No aircraft");
             } else {
@@ -103,7 +104,7 @@ public class HTTPRestCLIApplication {
             } else if (serverURL.contains("cities") || serverURL.contains("city")) {
 
             } else if (serverURL.contains("passengers")) {
-
+                cliApp.generatePassengerAircraftReport();
             } else {}
 
         }
