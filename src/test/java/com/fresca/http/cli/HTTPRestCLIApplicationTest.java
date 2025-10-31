@@ -1,8 +1,7 @@
-package com.fresca;
+package com.fresca.http.cli;
 
 import com.fresca.domain.Airport;
 import com.fresca.domain.City;
-import com.fresca.http.cli.HTTPRestCLIApplication;
 import com.fresca.http.client.RESTClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
