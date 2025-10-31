@@ -1,6 +1,5 @@
 package com.fresca.http.client;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -47,7 +46,7 @@ public class RESTClient {
         try {
             HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                System.out.println("***** " + response.body());
+                System.out.println("***** " + response.body() + "\n");
             } else {
                 System.out.println("Error Status Code: " + response.statusCode());
             }
@@ -81,7 +80,7 @@ public class RESTClient {
             HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                System.out.println("***** " + response.body());
+                System.out.println("***** " + response.body() + "\n");
             } else {
                 System.out.println("Error Status Code: " + response.statusCode());
             }
