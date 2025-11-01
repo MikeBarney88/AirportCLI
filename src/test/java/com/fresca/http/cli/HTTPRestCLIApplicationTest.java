@@ -137,4 +137,53 @@ public class HTTPRestCLIApplicationTest {
         String report = cliApp.generateAircraftAirportReport();
         Assertions.assertEquals("Boeing 747 (JoeySkies) takes off from and lands at: Toronto Pearson International Airport (YYZ); Airbus (Joline) takes off from and lands at: Bishop Toronto City Airport (YTZ); Crop Duster (Figley) takes off from and lands at: Totally Real Toronto Airport (TRT)", report);
     }
+    @Test
+    void testGeneratePassengerAirportsReport_validData() {
+        HTTPRestCLIApplication cliApp = new HTTPRestCLIApplication();
+
+
+        RESTClient fakeClient = new RESTClient() {
+            @Override
+            public List<Airport> getPassengerAirports() {
+                List<Airport> airports = new ArrayList<>();
+                airports.add(new Airport("Toronto Pearson International", "YYZ"));
+                airports.add(new Airport("Halifax Stanfield", "YHZ"));
+                airports.add(new Airport("St. John's International", "YYT"));
+                return airports;
+            }
+        };
+
+        cliApp.setRestClient(fakeClient);
+
+        String report = cliApp.generatePassengerAirportsReport();
+
+        String expected =
+                "Toronto Pearson International (YYZ),\n" +
+                        "Halifax Stanfield (YHZ),\n" +
+                        "St. John's International (YYT)";
+
+        Assertions.assertEquals(expected, report);
+    }
+
+
+    @Test
+    void testGeneratePassengerAirportsReport_emptyList() {
+        HTTPRestCLIApplication cliApp = new HTTPRestCLIApplication();
+
+
+        RESTClient fakeClient = new RESTClient() {
+            @Override
+            public List<Airport> getPassengerAirports() {
+                return new ArrayList<>();
+            }
+        };
+
+        cliApp.setRestClient(fakeClient);
+
+        String report = cliApp.generatePassengerAirportsReport();
+
+        Assertions.assertEquals("No passenger airport data available.", report);
+    }
+
+
 }

@@ -68,4 +68,28 @@ public class RESTClientTest {
         Assertions.assertEquals("JoeySkies", aircraft.get(0).getAirlineName());
         Assertions.assertEquals(300, aircraft.get(0).getNumberOfPassengers());
     }
+
+    @Test void testBuildAirportListFromResponse_emptyArray() throws JsonProcessingException {
+        String mockJSON = "[]";
+        List<Airport> airports = restClient.buildAirportListFromResponse(mockJSON);
+
+        Assertions.assertNotNull(airports);
+        Assertions.assertTrue(airports.isEmpty());
+    }
+
+    @Test void testBuildAirportListFromResponse_multipleAirports() throws JsonProcessingException {
+        String mockJSON = "[" +
+                "{\"name\": \"Toronto Pearson International Airport\", \"code\": \"YYZ\"}," +
+                "{\"name\": \"St. John's International Airport\", \"code\": \"YYT\"}" +
+                "]";
+        List<Airport> airports = restClient.buildAirportListFromResponse(mockJSON);
+
+        Assertions.assertEquals(2, airports.size());
+        Assertions.assertEquals("Toronto Pearson International Airport", airports.get(0).getName());
+        Assertions.assertEquals("YYZ", airports.get(0).getCode());
+        Assertions.assertEquals("St. John's International Airport", airports.get(1).getName());
+        Assertions.assertEquals("YYT", airports.get(1).getCode());
+    }
+
+
 }
