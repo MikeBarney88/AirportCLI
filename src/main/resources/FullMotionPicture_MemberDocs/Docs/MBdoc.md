@@ -14,12 +14,12 @@ controllers, and implementing proper exception handling all contributed to a dee
 
 ### What was good
 
-I had a great time learning about HTTPRest and RESTClient there was a bit of a learning curve to get it down path. The github branching and PR was something that is
+I had a great time learning about HTTPRest and RESTClient there was a bit of a learning curve to get it down path. The GitHub branching and PR was something that is
 very helpful in a group project, i kind of wish we had learned this early in the program. 
 
 ### what was bad
 
-We ran into a few snags on mocking tests and using the HTTPRestCLI/RESTClient as well as some PR's having some conflicts but ultimatly we figured out the issues and were
+We ran into a few snags on mocking tests and using the HTTPRestCLI/RESTClient as well as some PR's having some conflicts, but ultimately we figured out the issues and were
 able to move past and continue on. all in all it was a great learning experience.
 
 ### what can be improved

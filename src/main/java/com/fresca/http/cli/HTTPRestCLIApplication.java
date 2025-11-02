@@ -119,6 +119,33 @@ public class HTTPRestCLIApplication {
         return report.toString();
     }
 
+    public String generatePassengerAirportsReport() {
+        List<Airport> airports = getRestClient().getPassengerAirports();
+
+        StringBuffer report = new StringBuffer();
+
+        if (airports == null || airports.isEmpty()) {
+            report.append("No passenger airport data available.");
+            System.out.println(report);
+            return report.toString();
+        }
+
+        for (Airport airport : airports) {
+            report.append(airport.getName());
+            report.append(" (");
+            report.append(airport.getCode());
+            report.append(")");
+
+            if (airports.indexOf(airport) != (airports.size() - 1)) {
+                report.append(",\n");
+            }
+        }
+
+        System.out.println(report);
+
+        return report.toString();
+    }
+
 
     public RESTClient getRestClient() {
         if (restClient == null) {
@@ -154,38 +181,14 @@ public class HTTPRestCLIApplication {
                 cliApp.generateAirportReport();
             } else if (serverURL.contains("cities") || serverURL.contains("city")) {
                 cliApp.generateCitiesReport();
+            } else if (serverURL.contains("passengers/airports")) {
+                cliApp.generatePassengerAirportsReport();
             } else if (serverURL.contains("passengers")) {
                 cliApp.generatePassengerAircraftReport();
             } else {
                 System.out.println("Error: Unrecognized URL.");
                 System.out.println("Please use a URL containing one of: aircraft, airports, cities, passengers");}
         }
-    }
-    public String generatePassengerAirportsReport() {
-        List<Airport> airports = getRestClient().getPassengerAirports();
-
-        StringBuffer report = new StringBuffer();
-
-        if (airports == null || airports.isEmpty()) {
-            report.append("No passenger airport data available.");
-            System.out.println(report);
-            return report.toString();
-        }
-
-        for (Airport airport : airports) {
-            report.append(airport.getName());
-            report.append(" (");
-            report.append(airport.getCode());
-            report.append(")");
-
-            if (airports.indexOf(airport) != (airports.size() - 1)) {
-                report.append(",\n");
-            }
-        }
-
-        System.out.println(report);
-
-        return report.toString();
     }
 }
 
